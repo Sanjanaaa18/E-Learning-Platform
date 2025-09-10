@@ -1,22 +1,67 @@
+site.css
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-image: url('/images/BackgroundImage.jpg');
+    background-size: cover;
+    background-repeat: no-repeat; /* Avoid repeating */
+    background-attachment: fixed; /* Keep it fixed while scrolling */
+    background-position: center; /* Center the image */
+}
+
+.login-btn, .register-btn {
+    padding: 8px 18px;
+    border-radius: 25px;
+    font-weight: bold;
+    color: white !important;
+    transition: all 0.3s ease-in-out;
+    border: none;
+}
+
+/* Login button */
+.login-btn {
+    background-color: #004080;
+}
+
+    .login-btn:hover {
+        background-color: #0059b3;
+        transform: scale(1.08);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+/* Register button */
+.register-btn {
+    background-color: #ff6600;
+}
+
+    .register-btn:hover {
+        background-color: #e65c00;
+        transform: scale(1.08);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+/* Optional: Logout button */
+.logout-btn {
+    color: white;
+    font-weight: bold;
+    border-radius: 20px;
 }

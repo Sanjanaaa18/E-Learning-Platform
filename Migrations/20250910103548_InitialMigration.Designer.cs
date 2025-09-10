@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ELearningPlatformWebAppMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250909170526_InitialMigrations")]
-    partial class InitialMigrations
+    [Migration("20250910103548_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

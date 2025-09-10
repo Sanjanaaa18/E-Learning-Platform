@@ -14,7 +14,7 @@
         @if (Model.Course.Modules != null && Model.Course.Modules.Any())
         {
             <ul class="list-group">
-                @foreach (var module in Model.Course.Modules)
+                @foreach (var module in Model.Course.Modules.OrderBy(m => m.Id))
                 {
                     <li class="list-group-item">@module.Title</li>
                 }

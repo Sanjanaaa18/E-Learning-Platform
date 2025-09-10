@@ -12,17 +12,17 @@
             <th>Title</th>
             <th>Instructor ID</th>
             <th>Status</th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var course in Model)  // renamed item -> course for clarity
         {
             <tr>
-                <td>@item.Title</td>
-                <td>@item.InstructorId</td>
+                <td>@course.Title</td>
+                <td>@course.InstructorId</td>
                 <td>
-                    @if (item.IsApproved)
+                    @if (course.IsApproved)
                     {
                         <span class="badge bg-success">Approved</span>
                     }
@@ -32,12 +32,20 @@
                     }
                 </td>
                 <td>
-                    @if (!item.IsApproved)
+                    @if (!course.IsApproved)
                     {
-                        <form asp-action="ApproveCourse" method="post">
+                        <!-- Approve button -->
+                        <form asp-action="ApproveCourse" method="post" style="display:inline;">
                             @Html.AntiForgeryToken()
-                            <input type="hidden" name="courseId" value="@item.Id" />
+                            <input type="hidden" name="courseId" value="@course.Id" />
                             <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                        </form>
+
+                        <!-- Deny/Delete button -->
+                        <form asp-action="DenyCourse" method="post" style="display:inline; margin-left:5px;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="courseId" value="@course.Id" />
+                            <button type="submit" class="btn btn-sm btn-danger">Deny</button>
                         </form>
                     }
                 </td>
@@ -45,4 +53,5 @@
         }
     </tbody>
 </table>
+
 <a asp-action="Index">Back to Dashboard</a>

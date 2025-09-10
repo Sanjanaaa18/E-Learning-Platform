@@ -29,5 +29,12 @@ namespace ELearningPlatform.Repositories
                     .ThenInclude(m => m.Lessons) // Eager-load Modules and their Lessons
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
+
+        public async Task<Course> GetCourseForInstructorAsync(int courseId, string instructorId)
+        {
+            return await _context.Courses
+                .Include(c => c.Modules) // Eagerly load the modules
+                .FirstOrDefaultAsync(c => c.Id == courseId && c.InstructorId == instructorId);
+        }
     }
 }
