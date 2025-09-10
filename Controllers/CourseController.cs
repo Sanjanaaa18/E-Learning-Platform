@@ -62,21 +62,15 @@ namespace ELearningPlatform.Controllers
             return View(viewModel);
         }
         // GET: Courses/Details/5
-        // This action displays the course details and the form to add modules.
         [Authorize(Roles = "Instructor")]
         public async Task<IActionResult> Details(int id)
         {
             var currentUserId = _userManager.GetUserId(User);
 
-            // Fetch the course and include its existing modules
-            var course = await _unitOfWork.Courses.FindAsync(c => c.Id == id && c.InstructorId == currentUserId);
-
-            // Eager load modules
             course.First().Modules = (ICollection<Module>)await _unitOfWork.Modules.FindAsync(m => m.CourseId == id);
 
             if (course.FirstOrDefault() == null)
             {
-                // This prevents an instructor from accessing another instructor's course
                 return NotFound();
             }
 
@@ -89,7 +83,6 @@ namespace ELearningPlatform.Controllers
         }
 
         // POST: Courses/AddModule
-        // This action processes the form submission to add a new module.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Instructor")]
@@ -100,7 +93,6 @@ namespace ELearningPlatform.Controllers
 
             if (course == null)
             {
-                // Security check failed
                 return Forbid();
             }
 
@@ -115,11 +107,9 @@ namespace ELearningPlatform.Controllers
                 await _unitOfWork.Modules.AddAsync(newModule);
                 await _unitOfWork.CompleteAsync();
 
-                // Redirect back to the same details page to see the new module
                 return RedirectToAction(nameof(Details), new { id = course.Id });
             }
 
-            // If model state is invalid, reload the page with the course data
             viewModel.Course = course;
             return View("Details", viewModel);
         }
