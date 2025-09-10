@@ -1,0 +1,68 @@
+﻿@model ELearningPlatform.Models.Course
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<h1>@Model.Title</h1>
+<h4>Taught by @(Model.Instructor?.UserName ?? "N/A")</h4>
+<hr />
+
+<div>
+    <h5>Description</h5>
+    <p>@Model.Description</p>
+</div>
+
+<div class="mt-4">
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Student"))
+    {
+        if ((bool)ViewData["IsEnrolled"])
+        {
+            <a href="#" class="btn btn-success disabled">You are enrolled</a>
+        }
+        else
+        {
+            <form asp-action="Enroll" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="courseId" value="@Model.Id" />
+                <button type="submit" class="btn btn-primary">Enroll Now</button>
+            </form>
+        }
+    }
+    else if (!User.Identity.IsAuthenticated)
+    {
+        <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Details", "Catalog", new { id = Model.Id })">
+            Login to Enroll
+        </a>
+    }
+</div>
+
+<div class="mt-5">
+    <h3>Course Content</h3>
+    @foreach (var module in Model.Modules.OrderBy(m => m.Id))
+    {
+        <div class="accordion" id="accordionModule_@module.Id">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading_@module.Id">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@module.Id" aria-expanded="false" aria-controls="collapse_@module.Id">
+                        <strong>@module.Title</strong>
+                    </button>
+                </h2>
+                <div id="collapse_@module.Id" class="accordion-collapse collapse" aria-labelledby="heading_@module.Id" data-bs-parent="#accordionModule_@module.Id">
+                    <div class="accordion-body">
+                        <ul class="list-group">
+                            @foreach (var lesson in module.Lessons.OrderBy(l => l.Id))
+                            {
+                                <li class="list-group-item">@lesson.Title</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index">Back to Catalog</a>
+</div>

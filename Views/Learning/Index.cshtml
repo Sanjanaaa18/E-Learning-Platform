@@ -1,0 +1,24 @@
+﻿@model IEnumerable<ELearningPlatform.Models.Enrollment>
+
+@{
+    ViewData["Title"] = "My Learning";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    @foreach (var enrollment in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@enrollment.Course.Title</h5>
+                    <p class="card-text">@enrollment.Course.Description</p>
+                    <div class="mt-auto">
+                        <a asp-action="Course" asp-route-courseId="@enrollment.CourseId" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

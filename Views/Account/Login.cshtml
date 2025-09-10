@@ -1,0 +1,31 @@
+﻿@model ELearningPlatform.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+
+<form asp-action="Login" method="post" class="form-card">
+    @Html.AntiForgeryToken()
+
+    <label asp-for="Email"></label>
+    <input asp-for="Email" />
+    <span asp-validation-for="Email"></span>
+
+    <label asp-for="Password"></label>
+    <input asp-for="Password" type="password" />
+    <span asp-validation-for="Password"></span>
+
+    <div>
+        <input asp-for="RememberMe" />
+        <label asp-for="RememberMe">Remember me</label>
+    </div>
+
+    <input asp-for="ReturnUrl" type="hidden" />
+
+    <button class="btn" type="submit">Login</button>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

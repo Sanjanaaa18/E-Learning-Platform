@@ -1,0 +1,28 @@
+﻿@model IEnumerable<ELearningPlatform.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>
+                    <a asp-action="ManageUserRoles" asp-route-userId="@user.Id" class="btn btn-primary btn-sm">Manage Roles</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="Index">Back to Dashboard</a>

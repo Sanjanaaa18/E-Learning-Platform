@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ELearningPlatform.Models.Course>
+
+@{
+    ViewData["Title"] = "Manage Courses";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Instructor ID</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.InstructorId</td>
+                <td>
+                    @if (item.IsApproved)
+                    {
+                        <span class="badge bg-success">Approved</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning">Pending</span>
+                    }
+                </td>
+                <td>
+                    @if (!item.IsApproved)
+                    {
+                        <form asp-action="ApproveCourse" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="courseId" value="@item.Id" />
+                            <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="Index">Back to Dashboard</a>
