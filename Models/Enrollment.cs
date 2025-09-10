@@ -17,5 +17,7 @@ namespace ELearningPlatform.Models
 
         [DataType(DataType.Date)]
         public DateTime EnrollmentDate { get; set; }
+
+
     }
 }
