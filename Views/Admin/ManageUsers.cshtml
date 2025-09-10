@@ -4,49 +4,25 @@
     ViewData["Title"] = "Manage Users";
 }
 
-<div class="container py-5">
-    <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="display-5 fw-bold text-primary">👥 @ViewData["Title"]</h1>
-        <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
-            🔙 Back to Dashboard
-        </a>
-    </div>
+<h1>@ViewData["Title"]</h1>
 
-    <!-- Users Grid -->
-    <div class="row g-4">
+<table class="table">
+    <thead>
+        <tr>
+            <th>User Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach (var user in Model)
         {
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4 hover-shadow" 
-                     style="transition: transform 0.2s;">
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <div>
-                            <h5 class="card-title fw-bold">
-                                ✉️ @user.Email
-                            </h5>
-                            <p class="text-muted mb-3">
-                                ID: <span class="text-secondary">@user.Id</span>
-                            </p>
-                        </div>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <a asp-action="ManageUserRoles" asp-route-userId="@user.Id" 
-                               class="btn btn-primary btn-sm px-3 shadow-sm">
-                               🛠 Manage Roles
-                            </a>
-                            <span class="badge bg-success">Active ✅</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <tr>
+                <td>@user.Email</td>
+                <td>
+                    <a asp-action="ManageUserRoles" asp-route-userId="@user.Id" class="btn btn-primary btn-sm">Manage Roles</a>
+                </td>
+            </tr>
         }
-    </div>
-</div>
-
-<!-- Custom Hover Effect -->
-<style>
-    .hover-shadow:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-    }
-</style>
+    </tbody>
+</table>
+<a asp-action="Index">Back to Dashboard</a>
