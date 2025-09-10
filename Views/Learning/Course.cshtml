@@ -1,4 +1,4 @@
-﻿@model ELearningPlatform.Models.Course
+﻿@* @model ELearningPlatform.Models.Course
 
 @{
     ViewData["Title"] = Model.Title;
@@ -88,4 +88,36 @@
             });
         });
     </script>
+} *@
+
+
+@model ELearningPlatform.Models.Course
+
+@{
+    ViewData["Title"] = Model.Title;
+    var isCourseCompleted = ViewData["IsCourseCompleted"] as bool? ?? false;
+}
+
+<h1>@Model.Title</h1>
+<hr />
+
+@if (isCourseCompleted)
+{
+    <div class="alert alert-success">
+        Congratulations! You completed this course.
+    </div>
+}
+else
+{
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Finish the Course</h5>
+            <p class="card-text">Once you have completed all lessons, you can mark the entire course as complete.</p>
+            <form asp-controller="Learning" asp-action="MarkCourseAsComplete" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="courseId" value="@Model.Id" />
+                <button type="submit" class="btn btn-primary">Mark Course as Complete</button>
+            </form>
+        </div>
+    </div>
 }

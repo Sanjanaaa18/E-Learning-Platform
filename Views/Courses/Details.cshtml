@@ -1,4 +1,4 @@
-﻿@model ELearningPlatform.ViewModels.CourseDetailsViewModel
+﻿@* @model ELearningPlatform.ViewModels.CourseDetailsViewModel
 
 @{
     ViewData["Title"] = "Manage Course";
@@ -47,6 +47,84 @@
     </div>
 </div>
 
+<div class="mt-4">
+    <a asp-action="Index">Back to Course List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+} *@
+
+
+
+
+@model ELearningPlatform.ViewModels.CourseDetailsViewModel
+
+@{
+    ViewData["Title"] = "Manage Course";
+}
+
+<h1>Manage Course: @Model.Course.Title</h1>
+<p>@Model.Course.Description</p>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Existing Modules</h3>
+        @if (Model.Course.Modules != null && Model.Course.Modules.Any())
+        {
+            <ul class="list-group">
+                @foreach (var module in Model.Course.Modules.OrderBy(m => m.Id))
+                {
+                    <li class="list-group-item">@module.Title</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No modules have been added to this course yet.</p>
+        }
+    </div>
+
+    <div class="col-md-6">
+        <h3>Add a New Module</h3>
+        <form asp-action="AddModule" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Course.Id" />
+
+            <div class="form-group mb-3">
+                <label asp-for="NewModuleTitle" class="control-label"></label>
+                <input asp-for="NewModuleTitle" class="form-control" />
+                <span asp-validation-for="NewModuleTitle" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Add Module" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<hr class="mt-5" />
+<h3>Students Who Completed This Course</h3>
+
+@if (Model.CompletedStudentEmails != null && Model.CompletedStudentEmails.Any())
+{
+    <ul class="list-group">
+        @foreach (var email in Model.CompletedStudentEmails)
+        {
+            <li class="list-group-item">@email</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No students have completed this course yet.</p>
+}
 <div class="mt-4">
     <a asp-action="Index">Back to Course List</a>
 </div>

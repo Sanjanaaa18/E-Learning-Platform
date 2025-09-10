@@ -19,5 +19,7 @@ namespace ELearningPlatform.ViewModels
 
         // Optional: For listing modules separately if needed
         public List<Module> Modules { get; set; } = new List<Module>();
+
+        public List<string> CompletedStudentEmails { get; set; } = new List<string>();
     }
 }
