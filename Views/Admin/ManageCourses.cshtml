@@ -4,45 +4,131 @@
     ViewData["Title"] = "Manage Courses";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container mt-4">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold text-dark">
+            <i class="bi bi-journal-bookmark-fill text-primary"></i> @ViewData["Title"]
+        </h1>
+        <a asp-action="Index" class="btn btn-gradient btn-lg">
+            <i class="bi bi-arrow-left-circle"></i> Back to Dashboard
+        </a>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Instructor ID</th>
-            <th>Status</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Title</td>
-                <td>@item.InstructorId</td>
-                <td>
-                    @if (item.IsApproved)
+    <!-- Courses Table -->
+    <div class="card shadow-lg border-0 rounded-4 bg-gradient">
+        <div class="card-body p-4">
+            <table class="table align-middle table-hover text-center">
+                <thead class="table-primary text-dark">
+                    <tr>
+                        <th><i class="bi bi-book"></i> Title</th>
+                        <th><i class="bi bi-person-fill"></i> Instructor (Email)</th>
+                        <th><i class="bi bi-check2-circle"></i> Status</th>
+                        <th><i class="bi bi-gear"></i> Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var course in Model)
                     {
-                        <span class="badge bg-success">Approved</span>
+                        <tr>
+                            <!-- Course Title -->
+                            <td class="fw-semibold text-primary">@course.Title</td>
+
+                            <!-- Instructor Email -->
+                            <td class="text-secondary">
+                                <i class="bi bi-envelope-fill text-info"></i>
+                                @course.Instructor?.Email
+                            </td>
+
+                            <!-- Status -->
+                            <td>
+                                @if (course.IsApproved)
+                                {
+                                    <span class="badge bg-success px-3 py-2 shadow-sm">
+                                        <i class="bi bi-check-circle-fill"></i> Approved
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark px-3 py-2 shadow-sm">
+                                        <i class="bi bi-hourglass-split"></i> Pending
+                                    </span>
+                                }
+                            </td>
+
+                            <!-- Actions -->
+                            <td>
+                                @if (!course.IsApproved)
+                                {
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <!-- Approve button -->
+                                        <form asp-action="ApproveCourse" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="courseId" value="@course.Id" />
+                                            <button type="submit" class="btn btn-sm btn-success shadow-sm">
+                                                <i class="bi bi-check2"></i> Approve
+                                            </button>
+                                        </form>
+
+                                        <!-- Deny/Delete button -->
+                                        <form asp-action="DenyCourse" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="courseId" value="@course.Id" />
+                                            <button type="submit" class="btn btn-sm btn-danger shadow-sm">
+                                                <i class="bi bi-x-lg"></i> Deny
+                                            </button>
+                                        </form>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No actions</span>
+                                }
+                            </td>
+                        </tr>
                     }
-                    else
-                    {
-                        <span class="badge bg-warning">Pending</span>
-                    }
-                </td>
-                <td>
-                    @if (!item.IsApproved)
-                    {
-                        <form asp-action="ApproveCourse" method="post">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="courseId" value="@item.Id" />
-                            <button type="submit" class="btn btn-sm btn-success">Approve</button>
-                        </form>
-                    }
-                </td>
-            </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Styling -->
+<style>
+    body {
+        background: linear-gradient(135deg, #fdfbfb, #ebedee);
+        min-height: 100vh;
+    }
+
+    .card.bg-gradient {
+        background: linear-gradient(135deg, #ffffff, #f9f9f9);
+    }
+
+    .table thead {
+        font-size: 1.05rem;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f3f9ff !important;
+        transform: scale(1.01);
+        transition: all 0.2s ease-in-out;
+    }
+
+    .btn-gradient {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        color: white !important;
+        border-radius: 10px;
+        transition: 0.3s;
+    }
+
+        .btn-gradient:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
-    </tbody>
-</table>
-<a asp-action="Index">Back to Dashboard</a>
+
+    .btn-sm {
+        border-radius: 8px;
+        padding: 6px 14px;
+        font-size: 0.85rem;
+    }
+</style>

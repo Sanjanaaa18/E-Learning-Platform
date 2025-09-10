@@ -4,32 +4,151 @@
     ViewData["Title"] = "Manage Roles";
 }
 
-<h1>Manage Roles for @Model.UserName</h1>
-<hr />
+<div class="container-fluid vh-100 d-flex flex-column justify-content-center align-items-center">
+    <!-- Page Header -->
+    <div class="text-center mb-3">
+        <h2 class="fw-bold text-gradient mb-1">
+            <i class="bi bi-person-gear"></i> Manage Roles
+        </h2>
+        <p class="text-muted">Assign a role to <span class="fw-bold">@Model.UserName</span></p>
+    </div>
 
-<form method="post">
-    @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="UserId" />
-    <div class="card">
-        <div class="card-header">
-            Assign Roles
-        </div>
-        <div class="card-body">
+    <!-- Roles Form -->
+    <form method="post" class="shadow rounded-4 p-4 bg-white w-100" style="max-width: 1000px;">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="UserId" />
+
+        <div class="row justify-content-center g-3">
             @for (int i = 0; i < Model.Roles.Count; i++)
             {
-                <div class="form-check m-1">
-                    <input type="hidden" asp-for="@Model.Roles[i].RoleId" />
-                    <input type="hidden" asp-for="@Model.Roles[i].RoleName" />
-                    <input asp-for="@Model.Roles[i].IsSelected" class="form-check-input" />
-                    <label class="form-check-label" asp-for="@Model.Roles[i].IsSelected">
-                        @Model.Roles[i].RoleName
-                    </label>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="role-card border rounded-4 shadow-sm text-center p-3 h-100">
+                        <div class="icon-circle mb-2">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+                        <h6 class="fw-bold mb-3">@Model.Roles[i].RoleName</h6>
+
+                        <input type="radio"
+                               name="SelectedRole"
+                               value="@Model.Roles[i].RoleName"
+                               class="d-none role-radio"
+                               @(Model.Roles[i].IsSelected ? "checked" : "") />
+
+                        <button type="button"
+                                class="btn btn-outline-primary btn-sm select-btn"
+                                onclick="selectRole('@Model.Roles[i].RoleName', this)">
+                            <i class="bi bi-check2-circle"></i> Select
+                        </button>
+                    </div>
                 </div>
             }
         </div>
-        <div class="card-footer">
-            <input type="submit" value="Save Changes" class="btn btn-primary" />
-            <a asp-action="ManageUsers" class="btn btn-secondary">Cancel</a>
+
+        <!-- Selected Role Preview -->
+        <div class="mt-3 text-center">
+            <h6 class="fw-semibold text-secondary mb-1"><i class="bi bi-eye"></i> Selected Role</h6>
+            <div id="rolePreview"></div>
         </div>
-    </div>
-</form>
+
+        <!-- Buttons -->
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-gradient btn-md shadow-sm me-2">
+                <i class="bi bi-check2-circle"></i> Save
+            </button>
+            <a asp-action="ManageUsers" class="btn btn-outline-danger btn-md shadow-sm">
+                <i class="bi bi-x-circle"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<!-- Styling -->
+<style>
+    body {
+        background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .text-gradient {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .role-card {
+        transition: all 0.3s ease;
+        background: #fdfdfd;
+    }
+
+        .role-card.active {
+            border: 2px solid #007bff;
+            background: linear-gradient(135deg, #e3f2fd, #f8fbff);
+        }
+
+    .icon-circle {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        color: white;
+        font-size: 1.4rem;
+    }
+
+    #rolePreview span {
+        display: inline-block;
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+
+    .btn-gradient {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white !important;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+    .select-btn {
+        border-radius: 20px;
+        transition: 0.3s;
+    }
+
+        .select-btn:hover {
+            background: #007bff;
+            color: white;
+        }
+</style>
+
+<!-- Script -->
+<script>
+    function selectRole(roleName, btn) {
+        document.querySelectorAll(".role-card").forEach(card => card.classList.remove("active"));
+        const card = btn.closest(".role-card");
+        card.classList.add("active");
+
+        const radio = card.querySelector(".role-radio");
+        radio.checked = true;
+
+        document.getElementById("rolePreview").innerHTML = `<span>${roleName}</span>`;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const selected = document.querySelector(".role-radio:checked");
+        if (selected) {
+            selectRole(selected.value, selected.closest(".role-card").querySelector(".select-btn"));
+        }
+    });
+</script>

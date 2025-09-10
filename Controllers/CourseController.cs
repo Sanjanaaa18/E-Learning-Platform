@@ -1,5 +1,4 @@
-﻿// File: Controllers/CoursesController.cs
-using ELearningPlatform.Interfaces;
+﻿using ELearningPlatform.Interfaces;
 using ELearningPlatform.Models;
 using ELearningPlatform.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ELearningPlatform.Controllers
 {
-    [Authorize] // Ensures only logged-in users can access this controller
+    [Authorize(Roles = "Instructor")]
     public class CoursesController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -20,8 +19,7 @@ namespace ELearningPlatform.Controllers
             _userManager = userManager;
         }
 
-        // We will add action methods here
-        [Authorize(Roles = "Instructor")] // Restrict access to only Instructors
+        // GET: /Courses (Instructor's course list)
         public async Task<IActionResult> Index()
         {
             var currentUserId = _userManager.GetUserId(User);
@@ -29,89 +27,197 @@ namespace ELearningPlatform.Controllers
             return View(courses);
         }
 
-        // GET: Courses/Create
-        [Authorize(Roles = "Instructor")]
+        // GET: /Courses/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Courses/Create
+        // POST: /Courses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Instructor")]
         public async Task<IActionResult> Create(CourseViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
                 var currentUserId = _userManager.GetUserId(User);
-
                 var course = new Course
                 {
                     Title = viewModel.Title,
                     Description = viewModel.Description,
                     InstructorId = currentUserId,
-                    IsApproved = false // Courses are not approved by default
+                    IsApproved = false
                 };
-
                 await _unitOfWork.Courses.AddAsync(course);
-                await _unitOfWork.CompleteAsync(); // Save changes to the database
-
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(viewModel);
         }
-        // GET: Courses/Details/5
-        [Authorize(Roles = "Instructor")]
+
+        // GET: /Courses/Details/5 (Manage Modules)
         public async Task<IActionResult> Details(int id)
         {
             var currentUserId = _userManager.GetUserId(User);
+            var course = await _unitOfWork.Courses.GetCourseForInstructorAsync(id, currentUserId);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            var viewModel = new CourseDetailsViewModel { Course = course };
+            return View(viewModel);
+        }
 
-            course.First().Modules = (ICollection<Module>)await _unitOfWork.Modules.FindAsync(m => m.CourseId == id);
+        // POST: /Courses/AddModule
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddModule(CourseDetailsViewModel viewModel)
+        {
+            var currentUserId = _userManager.GetUserId(User);
+            var courseExists = (await _unitOfWork.Courses.FindAsync(c => c.Id == viewModel.Course.Id && c.InstructorId == currentUserId)).Any();
 
-            if (course.FirstOrDefault() == null)
+            if (!courseExists)
+            {
+                return Forbid();
+            }
+
+            if (!string.IsNullOrEmpty(viewModel.NewModuleTitle))
+            {
+                var newModule = new Module
+                {
+                    Title = viewModel.NewModuleTitle,
+                    CourseId = viewModel.Course.Id
+                };
+                await _unitOfWork.Modules.AddAsync(newModule);
+                await _unitOfWork.CompleteAsync();
+                return RedirectToAction(nameof(Details), new { id = viewModel.Course.Id });
+            }
+
+            var course = await _unitOfWork.Courses.GetCourseForInstructorAsync(viewModel.Course.Id, currentUserId);
+            viewModel.Course = course;
+            ModelState.AddModelError("NewModuleTitle", "Module title cannot be empty.");
+            return View("Details", viewModel);
+        }
+
+        // GET: Courses/Edit/5
+        // This action displays the form with the course's current data.
+        public async Task<IActionResult> Edit(int id)
+        {
+            var currentUserId = _userManager.GetUserId(User);
+            var course = (await _unitOfWork.Courses.FindAsync(c => c.Id == id && c.InstructorId == currentUserId)).FirstOrDefault();
+
+            if (course == null)
             {
                 return NotFound();
             }
 
-            var viewModel = new CourseDetailsViewModel
+            var viewModel = new CourseViewModel
             {
-                Course = course.FirstOrDefault()
+                Id = course.Id,
+                Title = course.Title,
+                Description = course.Description
             };
 
             return View(viewModel);
         }
 
-        // POST: Courses/AddModule
+        // POST: Courses/Edit/5
+        // This action saves the updated course data to the database.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Instructor")]
-        public async Task<IActionResult> AddModule(CourseDetailsViewModel viewModel)
+        public async Task<IActionResult> Edit(int id, CourseViewModel viewModel)
         {
-            var currentUserId = _userManager.GetUserId(User);
-            var course = (await _unitOfWork.Courses.FindAsync(c => c.Id == viewModel.Course.Id && c.InstructorId == currentUserId)).FirstOrDefault();
-
-            if (course == null)
+            if (id != viewModel.Id)
             {
-                return Forbid();
+                return BadRequest();
             }
 
             if (ModelState.IsValid)
             {
-                var newModule = new Module
-                {
-                    Title = viewModel.NewModuleTitle,
-                    CourseId = course.Id
-                };
+                var currentUserId = _userManager.GetUserId(User);
+                var courseToUpdate = (await _unitOfWork.Courses.FindAsync(c => c.Id == id && c.InstructorId == currentUserId)).FirstOrDefault();
 
-                await _unitOfWork.Modules.AddAsync(newModule);
+                if (courseToUpdate == null)
+                {
+                    return NotFound();
+                }
+
+                courseToUpdate.Title = viewModel.Title;
+                courseToUpdate.Description = viewModel.Description;
+
+                _unitOfWork.Courses.Update(courseToUpdate);
                 await _unitOfWork.CompleteAsync();
 
-                return RedirectToAction(nameof(Details), new { id = course.Id });
+                return RedirectToAction(nameof(Index));
+            }
+            return View(viewModel);
+        }
+
+
+        [Authorize(Roles = "Instructor")]
+
+        public async Task<IActionResult> Delete(int id)
+
+        {
+
+            var currentUserId = _userManager.GetUserId(User);
+
+            var course = (await _unitOfWork.Courses.FindAsync(c => c.Id == id && c.InstructorId == currentUserId)).FirstOrDefault();
+
+
+
+            if (course == null)
+
+            {
+
+                return NotFound();
+
             }
 
-            viewModel.Course = course;
-            return View("Details", viewModel);
+
+
+            return View(course); // Confirmation page
+
+        }
+
+
+
+        [HttpPost, ActionName("Delete")]
+
+        [ValidateAntiForgeryToken]
+
+        [Authorize(Roles = "Instructor")]
+
+        public async Task<IActionResult> DeleteConfirmed(int id)
+
+        {
+
+            var currentUserId = _userManager.GetUserId(User);
+
+            var course = (await _unitOfWork.Courses.FindAsync(c => c.Id == id && c.InstructorId == currentUserId)).FirstOrDefault();
+
+
+
+            if (course == null)
+
+            {
+
+                return NotFound();
+
+            }
+
+
+
+            _unitOfWork.Courses.Delete(course);
+
+
+
+            await _unitOfWork.CompleteAsync();
+
+
+
+            return RedirectToAction(nameof(Index));
+
         }
 
     }

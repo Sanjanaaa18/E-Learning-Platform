@@ -57,6 +57,21 @@ namespace ELearningPlatform.Controllers
             return RedirectToAction(nameof(ManageCourses));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DenyCourse(int courseId)
+        {
+            var course = await _unitOfWork.Courses.GetByIdAsync(courseId);
+            if (course == null) return NotFound();
+
+            _unitOfWork.Courses.Delete(course);
+            await _unitOfWork.CompleteAsync();
+
+            TempData["Message"] = $"Course '{course.Title}' has been denied and removed.";
+            return RedirectToAction(nameof(ManageCourses));
+        }
+
+
         public async Task<IActionResult> ManageUsers()
         {
             var users = await _userManager.Users.ToListAsync();

@@ -1,4 +1,6 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿loginpartial
+
+@using Microsoft.AspNetCore.Identity
 @using ELearningPlatform.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -7,7 +9,7 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                 Hello, @UserManager.GetUserName(User)!
             </a>
         </li>
@@ -15,17 +17,17 @@
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
                   asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
                   method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                <button type="submit" class="btn btn-danger logout-btn">Logout</button>
             </form>
         </li>
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        <li class="nav-item mx-1">
+            <a class="btn register-btn" asp-area="Identity" asp-page="/Account/Register">Register</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <li class="nav-item mx-1">
+            <a class="btn login-btn" asp-area="Identity" asp-page="/Account/Login">Login</a>
         </li>
     }
 </ul>

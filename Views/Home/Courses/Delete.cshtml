@@ -1,0 +1,16 @@
+﻿@model ELearningPlatform.Models.Course
+@{
+    ViewData["Title"] = "Delete Course";
+}
+
+<h1>Delete Course</h1>
+
+<div class="form-card">
+    <p>Are you sure you want to delete the course: <strong>@Model.Title</strong>?</p>
+    <form asp-action="Delete" method="post">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+        <button class="btn danger" type="submit">Delete</button>
+        <a class="btn" href="/Courses/MyCourses">Cancel</a>
+    </form>
+</div>
