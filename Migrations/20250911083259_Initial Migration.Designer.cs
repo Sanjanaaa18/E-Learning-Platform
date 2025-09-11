@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ELearningPlatformWebAppMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250910114913_InitialMigration")]
+    [Migration("20250911083259_Initial Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
