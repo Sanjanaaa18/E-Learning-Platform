@@ -2,38 +2,144 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<h1>@ViewData["Title"]</h1>
-<hr />
+<div class="dashboard-wrapper">
+    <!-- Header -->
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-white text-shadow">
+            <i class="bi bi-speedometer2"></i> @ViewData["Title"]
+        </h1>
+        <p class="text-light opacity-75">Monitor platform statistics and manage content</p>
+    </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card text-white bg-primary mb-3">
-            <div class="card-header">Total Users</div>
-            <div class="card-body">
-                <h5 class="card-title">@ViewBag.TotalUsers</h5>
+    <!-- Stats -->
+    <div class="row g-3 justify-content-center stats-row">
+        <div class="col-md-3 col-4">
+            <div class="stat-card bg-gradient-blue shadow-sm">
+                <i class="bi bi-people-fill"></i>
+                <h6>Total Users</h6>
+                <h3>@ViewBag.TotalUsers</h3>
+            </div>
+        </div>
+        <div class="col-md-3 col-4">
+            <div class="stat-card bg-gradient-purple shadow-sm">
+                <i class="bi bi-journal-bookmark-fill"></i>
+                <h6>Total Courses</h6>
+                <h3>@ViewBag.TotalCourses</h3>
+            </div>
+        </div>
+        <div class="col-md-3 col-4">
+            <div class="stat-card bg-gradient-orange shadow-sm">
+                <i class="bi bi-hourglass-split"></i>
+                <h6>Pending Approval</h6>
+                <h3>@ViewBag.PendingCourses</h3>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card text-white bg-info mb-3">
-            <div class="card-header">Total Courses</div>
-            <div class="card-body">
-                <h5 class="card-title">@ViewBag.TotalCourses</h5>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-white bg-warning mb-3">
-            <div class="card-header">Pending Approval</div>
-            <div class="card-body">
-                <h5 class="card-title">@ViewBag.PendingCourses</h5>
-            </div>
+
+    <!-- Management -->
+    <div class="text-center mt-3">
+        <h4 class="fw-bold text-white mb-3 text-shadow">Management</h4>
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <a asp-action="ManageCourses" class="btn btn-action btn-primary shadow-sm">
+                <i class="bi bi-journal-text"></i> Courses
+            </a>
+            <a asp-action="ManageUsers" class="btn btn-action btn-success shadow-sm">
+                <i class="bi bi-people"></i> Users
+            </a>
         </div>
     </div>
 </div>
 
-<div class="mt-4">
-    <h3>Management</h3>
-    <a asp-action="ManageCourses" class="btn btn-secondary">Manage Courses</a>
-    <a asp-action="ManageUsers" class="btn btn-secondary">Manage Users</a>
-</div>
+<!-- Styles -->
+<style>
+    .dashboard-wrapper {
+        height: 100vh; /* lock to single page */
+        background: url('/images/dashboard-bg.jpg') no-repeat center center fixed;
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly; /* evenly distribute */
+        align-items: center;
+        padding: 20px 15px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .dashboard-wrapper::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(20, 20, 20, 0.65);
+            z-index: 0;
+        }
+
+        .dashboard-wrapper > * {
+            position: relative;
+            z-index: 1;
+        }
+
+    .text-shadow {
+        text-shadow: 1px 2px 6px rgba(0,0,0,0.6);
+    }
+
+    /* Stats section */
+    .stats-row {
+        width: 100%;
+        max-width: 850px;
+    }
+
+    .stat-card {
+        padding: 12px;
+        border-radius: 12px;
+        color: #fff;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        font-size: 0.85rem;
+    }
+
+        .stat-card i {
+            font-size: 1.6rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .stat-card h3 {
+            font-size: 1.3rem;
+            margin: 4px 0 0;
+            font-weight: 700;
+        }
+
+        .stat-card h6 {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+    .bg-gradient-blue {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+    }
+
+    .bg-gradient-purple {
+        background: linear-gradient(135deg, #6f42c1, #b07cfb);
+    }
+
+    .bg-gradient-orange {
+        background: linear-gradient(135deg, #ff9800, #ff5722);
+    }
+
+    /* Management */
+    .btn-action {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+        border-radius: 30px;
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .btn-action:hover {
+            transform: scale(1.05);
+        }
+</style>

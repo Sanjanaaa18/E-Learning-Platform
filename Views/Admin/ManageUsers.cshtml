@@ -4,25 +4,131 @@
     ViewData["Title"] = "Manage Users";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="page-wrapper">
+    <!-- Header -->
+    <header class="page-header d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0"><i class="bi bi-people-fill text-primary"></i> @ViewData["Title"]</h2>
+            <p class="text-muted small">Assign roles and manage user access efficiently</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
+            <i class="bi bi-arrow-left-circle"></i> Back
+        </a>
+    </header>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>User Email</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.Email</td>
-                <td>
-                    <a asp-action="ManageUserRoles" asp-route-userId="@user.Id" class="btn btn-primary btn-sm">Manage Roles</a>
-                </td>
-            </tr>
+    <!-- Content -->
+    <section class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
+            <div class="table-responsive">
+                <table class="table align-middle modern-table">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-envelope-at"></i> User Email</th>
+                            <th class="text-center"><i class="bi bi-shield-lock"></i> Roles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="user-avatar me-3">
+                                            <i class="bi bi-person-circle"></i>
+                                        </div>
+                                        <span class="fw-medium">@user.Email</span>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <a asp-action="ManageUserRoles" asp-route-userId="@user.Id"
+                                       class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm">
+                                        <i class="bi bi-gear"></i> Manage Roles
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    /* Page Layout */
+    body {
+        background: #f4f6f9;
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+        color: #333;
+    }
+
+    .page-wrapper {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    .page-header h2 {
+        font-size: 1.8rem;
+    }
+
+    /* Table Styles */
+    .modern-table {
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+        .modern-table thead {
+            background: #f9fafc;
+            border-radius: 12px;
         }
-    </tbody>
-</table>
-<a asp-action="Index">Back to Dashboard</a>
+
+        .modern-table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: #555;
+            padding: 15px;
+        }
+
+        .modern-table tbody tr {
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+            .modern-table tbody tr:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+            }
+
+        .modern-table td {
+            padding: 18px 15px;
+            vertical-align: middle;
+        }
+
+    /* Avatar */
+    .user-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #eaf2ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: #007bff;
+    }
+
+    /* Buttons */
+    .btn-primary {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0056d2, #0093e9);
+            box-shadow: 0 6px 16px rgba(0, 123, 255, 0.35);
+            transform: translateY(-1px);
+        }
+</style>

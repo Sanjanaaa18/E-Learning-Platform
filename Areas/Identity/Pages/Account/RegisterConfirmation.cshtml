@@ -1,23 +1,76 @@
 ﻿@page
 @model RegisterConfirmationModel
 @{
-    ViewData["Title"] = "Register confirmation";
+    ViewData["Title"] = "Register Confirmation";
 }
 
-<h1>@ViewData["Title"]</h1>
-@{
-    if (@Model.DisplayConfirmAccountLink)
-    {
-<p>
-    This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
-    Normally this would be emailed: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Click here to confirm your account</a>
-</p>
-    }
-    else
-    {
-<p>
-        Please check your email to confirm your account.
-</p>
-    }
-}
+<div class="confirmation-wrapper d-flex align-items-center justify-content-center" style="min-height: 100vh; background: linear-gradient(135deg, #f5f7fa, #dfe9f3);">
+    <div class="card shadow-lg rounded-4 p-5 text-center" style="max-width: 600px; width: 100%; background: rgba(255,255,255,0.95);">
+        <div class="mb-4">
+            <i class="bi bi-check-circle-fill text-success fs-1 mb-2"></i>
+            <h2 class="fw-bold text-primary">Registration Successful!</h2>
+            <p class="text-secondary">Thank you for registering. Follow the instructions below to activate your account.</p>
+        </div>
 
+        @if (Model.DisplayConfirmAccountLink)
+        {
+            <div class="alert alert-info p-3 rounded-3">
+                <p class="mb-2">
+                    This application does not currently have a real email sender configured. See
+                    <a href="https://aka.ms/aspaccountconf" class="text-primary fw-semibold">these docs</a> to set up email sending.
+                </p>
+                <p>
+                    Normally this would be emailed:
+                    <a id="confirm-link" href="@Model.EmailConfirmationUrl" class="fw-bold text-success text-decoration-underline">Click here to confirm your account</a>
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success p-3 rounded-3">
+                <p class="mb-0">Please check your email to confirm your account.</p>
+            </div>
+        }
+
+        <div class="mt-4">
+            <a asp-page="/Account/Login" class="btn btn-gradient btn-lg rounded-pill">
+                Go to Login
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Gradient Button */
+    .btn-gradient {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        color: #fff;
+        font-weight: 600;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0,123,255,0.35);
+        }
+
+    /* Card Hover Effect */
+    .card {
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+    /* Typography */
+    .confirmation-wrapper h2 {
+        letter-spacing: 0.5px;
+    }
+
+    .confirmation-wrapper p {
+        line-height: 1.5;
+    }
+</style>

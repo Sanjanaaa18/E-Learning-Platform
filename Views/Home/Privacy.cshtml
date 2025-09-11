@@ -1,6 +1,55 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="privacy-wrapper py-5" style="background: #f5f7fa; min-height: 100vh;">
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h1 class="fw-bold display-4 text-primary mb-3">Privacy Policy</h1>
+            <p class="text-secondary fs-5">
+                We value your privacy. Please read our policy to understand how we handle your personal information.
+            </p>
+            <hr class="mx-auto" style="width: 100px; border-top: 3px solid #007bff;">
+        </div>
+
+        <!-- Policy Content -->
+        <div class="card shadow-sm rounded-4 p-4 bg-white border-0">
+            <h3 class="fw-semibold mb-3 text-primary">Information We Collect</h3>
+            <p class="text-secondary">We collect personal information when you register, use our services, or interact with our platform. This may include your name, email address, and usage data.</p>
+
+            <h3 class="fw-semibold mt-4 mb-3 text-primary">How We Use Your Information</h3>
+            <p class="text-secondary">Your information is used to provide and improve our services, communicate updates, personalize your experience, and ensure platform security.</p>
+
+            <h3 class="fw-semibold mt-4 mb-3 text-primary">Data Protection</h3>
+            <p class="text-secondary">We implement appropriate security measures to protect your data against unauthorized access, alteration, disclosure, or destruction.</p>
+
+            <h3 class="fw-semibold mt-4 mb-3 text-primary">Third-Party Sharing</h3>
+            <p class="text-secondary">We do not sell your personal information. Some services may use third-party providers to help operate our platform under strict confidentiality agreements.</p>
+
+            <h3 class="fw-semibold mt-4 mb-3 text-primary">Your Rights</h3>
+            <p class="text-secondary">You have the right to access, correct, or delete your personal information. You may contact us anytime for privacy-related inquiries.</p>
+
+            <p class="text-secondary mt-4 mb-0">Thank you for trusting us with your information. We are committed to maintaining your privacy and transparency.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .privacy-wrapper h1, .privacy-wrapper h3 {
+        letter-spacing: 0.5px;
+    }
+
+    .privacy-wrapper p {
+        line-height: 1.6;
+    }
+
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+        }
+</style>

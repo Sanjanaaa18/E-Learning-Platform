@@ -4,21 +4,73 @@
     ViewData["Title"] = "My Learning";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="learning-wrapper py-5" style="background: #f5f7fa; min-height: 100vh;">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="text-center mb-5">
+            <h1 class="fw-bold display-4 text-primary">@ViewData["Title"]</h1>
+            <hr class="mx-auto" style="width: 120px; border-top: 3px solid #00c6ff;">
+            <p class="text-secondary fs-5">Continue your learning journey and complete courses at your own pace.</p>
+        </div>
 
-<div class="row">
-    @foreach (var enrollment in Model)
-    {
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">@enrollment.Course.Title</h5>
-                    <p class="card-text">@enrollment.Course.Description</p>
-                    <div class="mt-auto">
-                        <a asp-action="Course" asp-route-courseId="@enrollment.CourseId" class="btn btn-primary">Start Learning</a>
+        <!-- Courses Grid -->
+        <div class="row g-4">
+            @foreach (var enrollment in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm rounded-4 border-0 hover-card">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold text-primary">@enrollment.Course.Title</h5>
+                            <p class="card-text text-secondary">@enrollment.Course.Description</p>
+                            <div class="mt-auto">
+                                <a asp-action="Course" asp-route-courseId="@enrollment.CourseId"
+                                   class="btn btn-primary btn-lg rounded-pill shadow-sm w-100 mt-3">
+                                    Start Learning
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
-    }
+    </div>
 </div>
+
+<style>
+    .learning-wrapper h1 {
+        letter-spacing: 0.5px;
+    }
+
+    .learning-wrapper p {
+        line-height: 1.6;
+    }
+
+    /* Card Effects */
+    .card {
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+    }
+
+    /* Buttons */
+    .btn-primary {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        border: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 123, 255, 0.35);
+        }
+
+    /* Responsive card text */
+    .card-text {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+</style>

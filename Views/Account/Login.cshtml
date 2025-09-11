@@ -3,28 +3,138 @@
     ViewData["Title"] = "Login";
 }
 
-<h1>Login</h1>
+<div class="login-wrapper d-flex align-items-center justify-content-center"
+     style="min-height: 100vh; background: linear-gradient(135deg, #f5f7fa, #dfe9f3);">
 
-<form asp-action="Login" method="post" class="form-card">
-    @Html.AntiForgeryToken()
+    <div class="card shadow-lg rounded-4 p-5 position-relative overflow-hidden"
+         style="max-width: 400px; width: 100%; background: rgba(255,255,255,0.95);">
 
-    <label asp-for="Email"></label>
-    <input asp-for="Email" />
-    <span asp-validation-for="Email"></span>
+        <!-- Decorative floating circles -->
+        <div class="floating-circle circle1"></div>
+        <div class="floating-circle circle2"></div>
 
-    <label asp-for="Password"></label>
-    <input asp-for="Password" type="password" />
-    <span asp-validation-for="Password"></span>
+        <div class="text-center mb-4">
+            <i class="bi bi-person-circle text-gradient fs-1 mb-2"></i>
+            <h2 class="fw-bold">Welcome Back</h2>
+            <p class="text-secondary small">Login to access your courses and continue learning.</p>
+        </div>
 
-    <div>
-        <input asp-for="RememberMe" />
-        <label asp-for="RememberMe">Remember me</label>
+        <form asp-action="Login" method="post" class="login-form">
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-semibold"></label>
+                <input asp-for="Email" class="form-control form-control-lg rounded-pill shadow-sm" placeholder="Enter your email" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label fw-semibold"></label>
+                <input asp-for="Password" type="password" class="form-control form-control-lg rounded-pill shadow-sm" placeholder="Enter your password" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <div class="form-check mb-4">
+                <input asp-for="RememberMe" class="form-check-input" id="rememberMe" />
+                <label asp-for="RememberMe" class="form-check-label" for="rememberMe">Remember me</label>
+            </div>
+
+            <input asp-for="ReturnUrl" type="hidden" />
+
+            <button type="submit" class="btn btn-gradient btn-lg w-100 rounded-pill mb-3">
+                Login
+            </button>
+
+            <div class="text-center">
+                <p class="mb-0 small text-secondary">
+                    Don't have an account?
+                    <a asp-area="Identity" asp-page="/Account/Register" class="text-primary fw-semibold text-decoration-underline">Register</a>
+                </p>
+            </div>
+        </form>
     </div>
+</div>
 
-    <input asp-for="ReturnUrl" type="hidden" />
+<style>
+    /* Gradient Icon */
+    .text-gradient {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-    <button class="btn" type="submit">Login</button>
-</form>
+    /* Gradient Buttons */
+    .btn-gradient {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        color: #fff;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0,123,255,0.35);
+        }
+
+    /* Card Hover Effect */
+    .card {
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+    /* Floating decorative circles */
+    .floating-circle {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.15;
+        pointer-events: none;
+    }
+
+    .circle1 {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        top: -30px;
+        right: -30px;
+    }
+
+    .circle2 {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #28a745, #5cd65c);
+        bottom: -20px;
+        left: -20px;
+    }
+
+    /* Typography */
+    .login-wrapper h2 {
+        letter-spacing: 0.5px;
+    }
+
+    .login-wrapper p {
+        line-height: 1.5;
+    }
+
+    /* Form Inputs */
+    .form-control {
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #00c6ff;
+            box-shadow: 0 0 5px rgba(0,198,255,0.5);
+        }
+
+    /* Form Check */
+    .form-check-label {
+        font-size: 0.9rem;
+    }
+</style>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")

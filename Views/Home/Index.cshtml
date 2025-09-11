@@ -2,7 +2,80 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center" >
-    <h1 class="display-4">Welcome to E-Learning Platform</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="home-wrapper py-5" style="position: relative; background: #f5f7fa; min-height: 100vh; overflow: hidden;">
+
+    <!-- Gradient Overlay -->
+    <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom right, rgba(0,123,255,0.1), rgba(0,198,255,0.1)); pointer-events:none;"></div>
+
+    <div class="container text-center position-relative" style="z-index: 2;">
+        <!-- Hero Section -->
+        <h1 class="display-4 fw-bold text-primary mb-3">Welcome to Our E-Learning Platform</h1>
+        <p class="fs-5 text-secondary mb-5">
+            Discover courses, enhance your skills, and achieve your learning goals online. Learn about
+            <a href="https://learn.microsoft.com/aspnet/core" class="text-primary fw-semibold text-decoration-underline" target="_blank"> 
+                building Web apps with ASP.NET Core
+            </a>.
+        </p>
+
+        <!-- Feature Highlights -->
+        <div class="row mt-4 justify-content-center">
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm rounded-4 p-4 h-100 text-center bg-white bg-opacity-90">
+                    <i class="bi bi-laptop-fill text-primary fs-1 mb-3"></i>
+                    <h5 class="fw-semibold mb-2 text-gradient">Interactive Lessons</h5>
+                    <p class="text-secondary small">Engage with interactive videos, quizzes, and exercises for hands-on learning.</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm rounded-4 p-4 h-100 text-center bg-white bg-opacity-90">
+                    <i class="bi bi-award-fill text-warning fs-1 mb-3"></i>
+                    <h5 class="fw-semibold mb-2 text-gradient">Certifications</h5>
+                    <p class="text-secondary small">Earn certificates for completed courses and showcase your achievements.</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm rounded-4 p-4 h-100 text-center bg-white bg-opacity-90">
+                    <i class="bi bi-people-fill text-success fs-1 mb-3"></i>
+                    <h5 class="fw-semibold mb-2 text-gradient">Community Support</h5>
+                    <p class="text-secondary small">Join a vibrant community of learners, ask questions, and collaborate.</p>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
 </div>
+
+<style>
+    .home-wrapper h1 {
+        letter-spacing: 0.5px;
+    }
+
+    .home-wrapper p {
+        line-height: 1.6;
+    }
+
+    .card {
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+        backdrop-filter: blur(8px);
+    }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+        }
+
+    .text-gradient {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .bi {
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+        .bi:hover {
+            transform: scale(1.2);
+        }
+</style>

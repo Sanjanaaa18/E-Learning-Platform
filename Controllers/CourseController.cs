@@ -69,35 +69,35 @@ namespace ELearningPlatform.Controllers
         //}
 
         public async Task<IActionResult> Details(int id)
+{
+    var currentUserId = _userManager.GetUserId(User);
+    var course = await _unitOfWork.Courses.GetCourseForInstructorAsync(id, currentUserId);
+    if (course == null) return NotFound();
+
+    // --- ADD THIS LOGIC TO GET COMPLETED STUDENTS ---
+    var completedEnrollments = (await _unitOfWork.Enrollments
+        .FindAsync(e => e.CourseId == id && e.IsCompleted))
+        .ToList();
+        
+    var completedStudentEmails = new List<string>();
+    foreach (var enrollment in completedEnrollments)
+    {
+        var student = await _userManager.FindByIdAsync(enrollment.StudentId);
+        if (student != null)
         {
-            var currentUserId = _userManager.GetUserId(User);
-            var course = await _unitOfWork.Courses.GetCourseForInstructorAsync(id, currentUserId);
-            if (course == null) return NotFound();
-
-            // --- ADD THIS LOGIC TO GET COMPLETED STUDENTS ---
-            var completedEnrollments = (await _unitOfWork.Enrollments
-                .FindAsync(e => e.CourseId == id && e.IsCompleted))
-                .ToList();
-
-            var completedStudentEmails = new List<string>();
-            foreach (var enrollment in completedEnrollments)
-            {
-                var student = await _userManager.FindByIdAsync(enrollment.StudentId);
-                if (student != null)
-                {
-                    completedStudentEmails.Add(student.Email);
-                }
-            }
-            // --- END OF NEW LOGIC ---
-
-            var viewModel = new CourseDetailsViewModel
-            {
-                Course = course,
-                CompletedStudentEmails = completedStudentEmails // Pass the list to the ViewModel
-            };
-
-            return View(viewModel);
+            completedStudentEmails.Add(student.Email);
         }
+    }
+    // --- END OF NEW LOGIC ---
+
+    var viewModel = new CourseDetailsViewModel
+    {
+        Course = course,
+        CompletedStudentEmails = completedStudentEmails // Pass the list to the ViewModel
+    };
+
+    return View(viewModel);
+}
 
 
         // POST: /Courses/AddModule

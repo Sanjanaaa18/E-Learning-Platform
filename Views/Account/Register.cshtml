@@ -3,32 +3,102 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>Register</h1>
+<div class="register-wrapper d-flex align-items-center justify-content-center" style="min-height: 100vh; background: linear-gradient(135deg, #f5f7fa, #dfe9f3);">
+    <div class="card shadow-lg rounded-4 p-5" style="max-width: 450px; width: 100%; background: rgba(255,255,255,0.95);">
+        <div class="text-center mb-4">
+            <i class="bi bi-pencil-square text-primary fs-1 mb-2"></i>
+            <h2 class="fw-bold">Create Your Account</h2>
+            <p class="text-secondary">Join our platform to start learning or teaching courses online.</p>
+        </div>
 
-<form asp-action="Register" method="post" class="form-card">
-    @Html.AntiForgeryToken()
+        <form asp-action="Register" method="post" class="register-form">
+            @Html.AntiForgeryToken()
 
-    <label asp-for="FullName"></label>
-    <input asp-for="FullName" />
-    <span asp-validation-for="FullName"></span>
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label fw-semibold"></label>
+                <input asp-for="FullName" class="form-control form-control-lg rounded-pill shadow-sm" placeholder="Enter your full name" />
+                <span asp-validation-for="FullName" class="text-danger small"></span>
+            </div>
 
-    <label asp-for="Email"></label>
-    <input asp-for="Email" />
-    <span asp-validation-for="Email"></span>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-semibold"></label>
+                <input asp-for="Email" class="form-control form-control-lg rounded-pill shadow-sm" placeholder="Enter your email" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
 
-    <label asp-for="Password"></label>
-    <input asp-for="Password" type="password" />
-    <span asp-validation-for="Password"></span>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label fw-semibold"></label>
+                <input asp-for="Password" type="password" class="form-control form-control-lg rounded-pill shadow-sm" placeholder="Enter your password" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
 
-    <label asp-for="Role">Register as</label>
-    <select asp-for="Role">
-        <option value="Student">Student</option>
-        <option value="Instructor">Instructor</option>
-        <option value="Admin">Admin</option>
-    </select>
+            <div class="mb-4">
+                <label asp-for="Role" class="form-label fw-semibold">Register as</label>
+                <select asp-for="Role" class="form-select form-select-lg rounded-pill shadow-sm">
+                    <option value="Student">Student</option>
+                    <option value="Instructor">Instructor</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
 
-    <button class="btn" type="submit">Create account</button>
-</form>
+            <button type="submit" class="btn btn-gradient btn-lg w-100 rounded-pill mb-3">
+                Create Account
+            </button>
+
+            <div class="text-center">
+                <p class="mb-0 small text-secondary">
+                    Already have an account?
+                    <a asp-area="Identity" asp-page="/Account/Login" class="text-primary fw-semibold text-decoration-underline">Login</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Gradient Button */
+    .btn-gradient {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        color: #fff;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0,123,255,0.35);
+        }
+
+    /* Card Hover Effect */
+    .card {
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+    /* Typography */
+    .register-wrapper h2 {
+        letter-spacing: 0.5px;
+    }
+
+    .register-wrapper p {
+        line-height: 1.5;
+    }
+
+    /* Form Inputs */
+    .form-control, .form-select {
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #00c6ff;
+            box-shadow: 0 0 5px rgba(0,198,255,0.5);
+        }
+</style>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")

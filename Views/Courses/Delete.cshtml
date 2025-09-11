@@ -3,14 +3,83 @@
     ViewData["Title"] = "Delete Course";
 }
 
-<h1>Delete Course</h1>
+<div class="delete-course-wrapper d-flex align-items-center justify-content-center" style="min-height: 80vh; background: #f5f7fa;">
+    <div class="card shadow-lg rounded-5 p-5 form-card text-center bg-white border-0 position-relative">
+        <h2 class="fw-bold text-danger mb-3">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm Deletion
+        </h2>
+        <p class="text-secondary fs-5 mb-5">
+            Are you sure you want to delete the course:
+            <strong class="text-dark">@Model.Title</strong>?
+        </p>
 
-<div class="form-card">
-    <p>Are you sure you want to delete the course: <strong>@Model.Title</strong>?</p>
-    <form asp-action="Delete" method="post">
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(model => model.Id)
-        <button class="btn danger" type="submit">Delete</button>
-        <a class="btn" href="/Courses/MyCourses">Cancel</a>
-    </form>
+        <form asp-action="Delete" method="post" class="d-flex justify-content-center gap-4">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Id)
+
+            <button class="btn btn-danger btn-lg rounded-pill shadow-sm px-4">
+                <i class="bi bi-trash-fill me-2"></i> Delete
+            </button>
+            <a class="btn btn-outline-secondary btn-lg rounded-pill shadow-sm px-4" href="/Courses/MyCourses">
+                <i class="bi bi-x-circle me-2"></i> Cancel
+            </a>
+        </form>
+    </div>
 </div>
+
+<style>
+    /* Card Styling */
+    .form-card {
+        max-width: 500px;
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+        .form-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12);
+        }
+
+    /* Typography */
+    .delete-course-wrapper h2 {
+        letter-spacing: 0.5px;
+        font-size: 1.75rem;
+    }
+
+    .delete-course-wrapper p {
+        line-height: 1.7;
+        font-size: 1.05rem;
+    }
+
+    /* Buttons */
+    .btn-danger {
+        background: linear-gradient(135deg, #dc3545, #ff6b6b);
+        border: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(220, 53, 69, 0.35);
+        }
+
+    .btn-outline-secondary {
+        border-width: 2px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        color: #6c757d;
+    }
+
+        .btn-outline-secondary:hover {
+            background: #6c757d;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(108, 117, 125, 0.25);
+        }
+
+    /* Buttons width */
+    .delete-course-wrapper .btn {
+        min-width: 140px;
+        font-size: 1rem;
+    }
+</style>
