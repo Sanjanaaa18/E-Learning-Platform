@@ -4,18 +4,68 @@
     ViewData["Title"] = "Log out";
 }
 
-<header>
-    <h1>@ViewData["Title"]</h1>
-    @{
-        if (User.Identity?.IsAuthenticated ?? false)
+<div class="logout-wrapper d-flex align-items-center justify-content-center" style="min-height: 100vh; background: linear-gradient(135deg, #f5f7fa, #dfe9f3);">
+    <div class="card shadow-lg rounded-4 p-5 text-center" style="max-width: 500px; width: 100%; background: rgba(255,255,255,0.95);">
+        <i class="bi bi-box-arrow-right text-gradient fs-1 mb-3"></i>
+        <h2 class="fw-bold mb-3">@ViewData["Title"]</h2>
+
+        @if (User.Identity?.IsAuthenticated ?? false)
         {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
+            <p class="text-secondary mb-4">You are currently logged in. Click the button below to logout safely.</p>
+            <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout"
+                  asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="btn btn-gradient btn-lg rounded-pill px-4">
+                    Logout
+                </button>
             </form>
         }
         else
         {
-            <p>You have successfully logged out of the application.</p>
+            <p class="text-success">You have successfully logged out of the application.</p>
+            <a asp-page="/Index" class="btn btn-primary btn-lg rounded-pill mt-3">Return to Home</a>
         }
+    </div>
+</div>
+
+<style>
+    /* Gradient Buttons */
+    .btn-gradient {
+        background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        color: #fff;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: 0 4px 10px rgba(255,75,43,0.3);
     }
-</header>
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,75,43,0.5);
+        }
+
+    /* Gradient Icons */
+    .text-gradient {
+        background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Card hover effect */
+    .card {
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+    /* Typography */
+    .logout-wrapper h2 {
+        letter-spacing: 0.5px;
+    }
+
+    .logout-wrapper p {
+        line-height: 1.5;
+    }
+</style>

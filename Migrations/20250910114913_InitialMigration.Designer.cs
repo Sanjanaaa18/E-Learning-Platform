@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ELearningPlatformWebAppMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250910103548_InitialMigration")]
+    [Migration("20250910114913_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -132,11 +132,17 @@ namespace ELearningPlatformWebAppMVC.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("CompletionDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("EnrollmentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("StudentId", "CourseId");
 

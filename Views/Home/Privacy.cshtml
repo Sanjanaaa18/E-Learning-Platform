@@ -1,6 +1,86 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "The Team Studio Editors";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="team-wrapper py-5" style="background: linear-gradient(135deg, #f5f7fa, #e3f2fd); min-height: 100vh;">
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h1 class="fw-bold display-4 text-primary mb-3">The Team Studio Editors</h1>
+            <p class="text-secondary fs-5">
+                We are a passionate group of developers who collaborated to build an innovative <strong>E-Learning Platform</strong>
+                that empowers learners and educators.
+            </p>
+            <hr class="mx-auto" style="width: 120px; border-top: 3px solid #007bff;">
+        </div>
+
+        <!-- Team Members -->
+        <div class="row g-4 justify-content-center">
+            <!-- Tejaswini -->
+            <div class="col-md-4">
+                <div class="card shadow-sm rounded-4 p-4 text-center border-0 h-100">
+                    <div class="mb-3">
+                        <i class="bi bi-person-circle text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">Tejaswini G H</h4>
+                    <p class="text-secondary">Developer | Designer</p>
+                    <p class="small text-muted">Focused on backend logic, architecture, and frontend design. Loves bringing ideas to life with creativity and code.</p>
+                </div>
+            </div>
+
+            <!-- Sounak -->
+            <div class="col-md-4">
+                <div class="card shadow-sm rounded-4 p-4 text-center border-0 h-100">
+                    <div class="mb-3">
+                        <i class="bi bi-code-slash text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">Sounak Dutta</h4>
+                    <p class="text-secondary">Full-Stack Developer</p>
+                    <p class="small text-muted">Specialized in coding the core functionalities and integrating modern web technologies for the platform.</p>
+                </div>
+            </div>
+
+            <!-- Sanjana -->
+            <div class="col-md-4">
+                <div class="card shadow-sm rounded-4 p-4 text-center border-0 h-100">
+                    <div class="mb-3">
+                        <i class="bi bi-brush text-danger" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">Sanjana</h4>
+                    <p class="text-secondary">UI/UX Designer</p>
+                    <p class="small text-muted">Worked on user experience, interface design, and making the platform visually appealing and user-friendly.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Highlight -->
+        <div class="card shadow-sm rounded-4 p-4 bg-white border-0 mt-5">
+            <h3 class="fw-semibold mb-3 text-primary text-center">Our Project: E-Learning Platform</h3>
+            <p class="text-secondary text-center">
+                Our project focuses on creating a scalable and modern platform where instructors can create courses,
+                learners can enroll, and knowledge is shared seamlessly. With features like role management, course modules,
+                and a beautiful interface, our platform bridges the gap between learning and teaching in the digital age.
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .team-wrapper h1, .team-wrapper h3 {
+        letter-spacing: 0.5px;
+    }
+
+    .team-wrapper p {
+        line-height: 1.6;
+    }
+
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #fff;
+    }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 28px rgba(0,0,0,0.1);
+        }
+</style>

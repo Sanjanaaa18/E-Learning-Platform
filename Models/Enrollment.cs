@@ -17,5 +17,8 @@ namespace ELearningPlatform.Models
 
         [DataType(DataType.Date)]
         public DateTime EnrollmentDate { get; set; }
+
+        public bool IsCompleted { get; set; } = false;
+        public DateTime? CompletionDate { get; set; }
     }
 }

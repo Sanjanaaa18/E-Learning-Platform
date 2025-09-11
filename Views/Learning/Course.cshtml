@@ -2,90 +2,104 @@
 
 @{
     ViewData["Title"] = Model.Title;
-    var completedLessonIds = ViewData["CompletedLessonIds"] as List<int> ?? new List<int>();
+    var isCourseCompleted = ViewData["IsCourseCompleted"] as bool? ?? false;
 }
 
-<h1>@Model.Title</h1>
-<hr />
+<div class="course-completion-wrapper py-5" style="background: linear-gradient(135deg, #e0f7ff, #f5f7fa); min-height: 100vh;">
+    <div class="container">
+        <!-- Course Header -->
+        <div class="text-center mb-5">
+            <h1 class="fw-bold display-4 text-primary">@Model.Title</h1>
+            <hr class="mx-auto" style="width: 120px; border-top: 4px solid #00c6ff;">
+            <p class="fs-5 text-secondary">Track your progress and complete this course to earn your certificate!</p>
+        </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h4>Course Content</h4>
-        @foreach (var module in Model.Modules.OrderBy(m => m.Id))
+        <!-- Completion Status -->
+        @if (isCourseCompleted)
         {
-            <h5>@module.Title</h5>
-            <ul class="list-group mb-3">
-                @foreach (var lesson in module.Lessons.OrderBy(l => l.Id))
-                {
-                    <li class="list-group-item d-flex justify-content-between align-items-center lesson-item" id="lesson-@lesson.Id">
-                        <div class="lesson-title">
-                            @if (completedLessonIds.Contains(lesson.Id))
-                            {
-                                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                            }
-                            @lesson.Title
-                        </div>
-                        @if (!completedLessonIds.Contains(lesson.Id))
-                        {
-                            <form class="mark-complete-form" data-lesson-id="@lesson.Id" data-course-id="@Model.Id" method="post">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-sm btn-outline-success">Complete</button>
-                            </form>
-                        }
-                        else
-                        {
-                            <span class="badge bg-success">Done</span>
-                        }
-                    </li>
-                }
-            </ul>
-        }
-    </div>
-    <div class="col-md-8">
-        <h4>Lesson Details</h4>
-        <div class="card">
-            <div class="card-body">
-                <p>Lesson content will be displayed here. Select a lesson from the list.</p>
+            <div class="alert alert-success text-center p-4 shadow-lg rounded-4 fs-5">
+                <i class="bi bi-check-circle-fill me-2 fs-3"></i>
+                Congratulations! You have completed this course.
             </div>
+        }
+        else
+        {
+            <div class="card shadow-lg rounded-4 p-4 mb-4 glass-card">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold mb-3">Finish the Course</h5>
+                    <p class="card-text mb-4 text-secondary">
+                        Once you have completed all lessons, you can mark the entire course as complete to track your achievement.
+                    </p>
+                    <form asp-controller="Learning" asp-action="MarkCourseAsComplete" method="post" class="d-inline-block">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="courseId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-gradient btn-lg rounded-pill shadow-sm">
+                            Mark Course as Complete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
+
+        <!-- Optional Motivational Section -->
+        <div class="text-center mt-5">
+            <h5 class="fw-semibold text-primary mb-3">Keep Learning, Keep Growing!</h5>
+            <p class="text-secondary">
+                Explore more courses and enhance your skills. Every step you take brings you closer to mastery.
+            </p>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script>
-        $(document).on("submit", ".mark-complete-form", function (e) {
-            e.preventDefault();
+<style>
+    /* Wrapper Typography */
+    .course-completion-wrapper h1, h5 {
+        letter-spacing: 0.5px;
+    }
 
-            var form = $(this);
-            var lessonId = form.data("lesson-id");
-            var courseId = form.data("course-id");
+    .course-completion-wrapper p {
+        line-height: 1.6;
+    }
 
-            $.ajax({
-                url: '@Url.Action("MarkAsComplete", "Learning")',
-                type: 'POST',
-                data: {
-                    lessonId: lessonId,
-                    courseId: courseId,
-                    __RequestVerificationToken: form.find('input[name="__RequestVerificationToken"]').val()
-                },
-                success: function (response) {
-                    if (response.success) {
-                        var lessonItem = $("#lesson-" + lessonId);
+    /* Glass Card Effect */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        border: none;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-                        // Add check icon
-                        lessonItem.find(".lesson-title").prepend('<i class="bi bi-check-circle-fill text-success me-2"></i>');
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
 
-                        // Replace form with "Done" badge
-                        form.replaceWith('<span class="badge bg-success">Done</span>');
-                    } else {
-                        alert(response.message || "Error marking lesson as complete.");
-                    }
-                },
-                error: function () {
-                    alert("Something went wrong. Please try again.");
-                }
-            });
-        });
-    </script>
-}
+    /* Buttons */
+    .btn-gradient {
+        background: linear-gradient(135deg, #00c6ff, #007bff);
+        color: #fff;
+        font-weight: 600;
+        padding: 0.65rem 1.75rem;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
+        }
+
+    /* Alerts */
+    .alert-success {
+        background: linear-gradient(135deg, #28a745, #5cd65c);
+        color: #fff;
+        font-weight: 600;
+        border: none;
+        border-radius: 1rem;
+    }
+
+    /* Text Opacity */
+    .text-secondary {
+        color: rgba(108, 117, 125, 0.85);
+    }
+</style>

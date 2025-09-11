@@ -4,52 +4,157 @@
     ViewData["Title"] = "Manage Course";
 }
 
-<h1>Manage Course: @Model.Course.Title</h1>
-<p>@Model.Course.Description</p>
-<hr />
+<div class="manage-course-wrapper py-4" style="background: #f5f7fa; min-height: 100vh;">
+    <!-- Header -->
+    <div class="container mb-4 text-center">
+        <h1 class="fw-bold display-5 text-primary">@Model.Course.Title</h1>
+        <p class="text-secondary fs-6">@Model.Course.Description</p>
+        <hr class="mx-auto mt-2" style="border-top: 3px solid #00c6ff; width: 100px;">
+    </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <h3>Existing Modules</h3>
-        @if (Model.Course.Modules != null && Model.Course.Modules.Any())
-        {
-            <ul class="list-group">
-                @foreach (var module in Model.Course.Modules.OrderBy(m => m.Id))
+    <div class="container">
+        <div class="row g-4">
+            <!-- Existing Modules -->
+            <div class="col-md-6">
+                <div class="card shadow-sm rounded-4 p-3 bg-white border-0">
+                    <h3 class="fw-bold text-gradient mb-3" style="background: linear-gradient(135deg,#007bff,#00c6ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Existing Modules</h3>
+
+                    @if (Model.Course.Modules != null && Model.Course.Modules.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var module in Model.Course.Modules.OrderBy(m => m.Id))
+                            {
+                                <li class="list-group-item d-flex align-items-center justify-content-between">
+                                    <span>@module.Title</span>
+                                    <i class="bi bi-folder-fill text-primary fs-5"></i>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-secondary mb-0">No modules added yet.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Add New Module -->
+            <div class="col-md-6">
+                <div class="card shadow-sm rounded-4 p-3 bg-white border-0">
+                    <h3 class="fw-bold text-gradient mb-3" style="background: linear-gradient(135deg,#007bff,#00c6ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Add Module</h3>
+
+                    <form asp-action="AddModule" method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+                        <input type="hidden" asp-for="Course.Id" />
+
+                        <div class="form-group mb-3">
+                            <label asp-for="NewModuleTitle" class="form-label fw-semibold"></label>
+                            <input asp-for="NewModuleTitle" class="form-control form-control-sm rounded-pill" />
+                            <span asp-validation-for="NewModuleTitle" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <input type="submit" value="Add" class="btn btn-primary btn-sm rounded-pill shadow-sm" />
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill shadow-sm">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Students Section -->
+        <div class="mt-4">
+            <h3 class="fw-bold text-gradient mb-2" style="background: linear-gradient(135deg,#28a745,#5cd65c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Completed Students</h3>
+            <div class="card shadow-sm rounded-4 p-3 bg-white border-0">
+                @if (Model.CompletedStudentEmails != null && Model.CompletedStudentEmails.Any())
                 {
-                    <li class="list-group-item">@module.Title</li>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var email in Model.CompletedStudentEmails)
+                        {
+                            <li class="list-group-item d-flex align-items-center">
+                                <i class="bi bi-person-check-fill text-success me-2 fs-5"></i> @email
+                            </li>
+                        }
+                    </ul>
                 }
-            </ul>
-        }
-        else
-        {
-            <p>No modules have been added to this course yet.</p>
-        }
-    </div>
-
-    <div class="col-md-6">
-        <h3>Add a New Module</h3>
-        <form asp-action="AddModule" method="post">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <input type="hidden" asp-for="Course.Id" />
-
-            <div class="form-group mb-3">
-                <label asp-for="NewModuleTitle" class="control-label"></label>
-                <input asp-for="NewModuleTitle" class="form-control" />
-                <span asp-validation-for="NewModuleTitle" class="text-danger"></span>
+                else
+                {
+                    <p class="text-secondary mb-0">No students have completed this course.</p>
+                }
             </div>
-
-            <div class="form-group">
-                <input type="submit" value="Add Module" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div class="mt-4">
-    <a asp-action="Index">Back to Course List</a>
-</div>
+<style>
+    /* Typography */
+    .manage-course-wrapper h1, h3 {
+        letter-spacing: 0.4px;
+    }
+
+    .manage-course-wrapper p {
+        line-height: 1.4;
+        font-size: 0.95rem;
+    }
+
+    /* Gradient Text */
+    .text-gradient {
+        font-weight: 700;
+        font-size: 1.25rem;
+    }
+
+    /* Cards */
+    .card {
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        }
+
+    /* List Items */
+    .list-group-item {
+        border-radius: 8px;
+        margin-bottom: 5px;
+        transition: all 0.2s ease;
+        font-size: 0.9rem;
+        cursor: pointer;
+        padding: 10px 14px;
+    }
+
+        .list-group-item:hover {
+            background: #e0f0ff;
+            transform: translateX(3px);
+        }
+
+    /* Buttons */
+    .btn-primary {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        border: none;
+        font-weight: 600;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0, 123, 255, 0.3);
+        }
+
+    .btn-outline-secondary {
+        border-width: 2px;
+        font-weight: 500;
+        color: #6c757d;
+    }
+
+        .btn-outline-secondary:hover {
+            background: #6c757d;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+        }
+</style>
 
 @section Scripts {
     @{
